@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>01-gcode</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+</head>
+<body>
+<h1 id="g-code-cheat-sheet">G-Code Cheat Sheet</h1>
+<p><em>Punch Line</em><br />
+- That Guy</p>
+<hr />
+<h2 id="introduction">Introduction</h2>
+<p>This is just a ChatGPT list I put together to reference. Make it
+easier to build the .gcode file, because like hell I’m gonna memorize
+all this stuff.</p>
+<hr />
+<h2 id="d-printer-g-code-m-code-cheat-sheet">3D Printer G-code &amp;
+M-code Cheat Sheet</h2>
+<p><em>Target: Ender-3 / Marlin firmware</em></p>
+<hr />
+<h3 id="file-structure-order-of-operations">📌 File Structure &amp;
+Order of Operations</h3>
+<p>A typical 3D print G-code file is structured in <strong>five main
+sections</strong>:</p>
+<ol type="1">
+<li><strong>Start G-code (Setup)</strong>
+<ul>
+<li>Purpose: Prepare the printer for the print.<br />
+</li>
+<li>Tasks include: homing axes, setting units, priming the nozzle,
+heating bed/nozzle.<br />
+</li>
+<li>Must be executed first to avoid collisions or failed prints.</li>
+</ul></li>
+<li><strong>Print G-code (Model Moves / Layers)</strong>
+<ul>
+<li>Purpose: Moves the nozzle to draw the object.<br />
+</li>
+<li>Generated by slicer (e.g., Cura, PrusaSlicer).<br />
+</li>
+<li>Uses G1 moves with X/Y/Z coordinates and extrusion (E).<br />
+</li>
+<li>Includes layer changes and infill/wall patterns.</li>
+</ul></li>
+<li><strong>Layer Change / Mid-Print Commands (Optional)</strong>
+<ul>
+<li>Purpose: Insert layer markers, adjust fan speed, retraction, or
+other per-layer settings.<br />
+</li>
+<li>Often auto-inserted by slicer.</li>
+</ul></li>
+<li><strong>End G-code (Teardown)</strong>
+<ul>
+<li>Purpose: Safely finish the print.<br />
+</li>
+<li>Tasks include: turn off heaters, retract filament, park the nozzle,
+disable motors.<br />
+</li>
+<li>Must be executed last to avoid leaving printer in unsafe state.</li>
+</ul></li>
+<li><strong>Comments / Metadata (Optional but Recommended)</strong>
+<ul>
+<li>Purpose: Document the print for reference or troubleshooting.<br />
+</li>
+<li>Example: slicer version, filament used, print time, layer
+height.</li>
+</ul></li>
+</ol>
+<p><strong>✅ Recommended Order in File:</strong> Start G-code → Print
+G-code → Layer Changes (if any) → End G-code → Comments/Metadata</p>
+<hr />
+<h3 id="g-codes-movement-positioning">G-Codes (Movement /
+Positioning)</h3>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>G0</td>
+<td>Rapid linear move (non-extruding)</td>
+</tr>
+<tr>
+<td>G1</td>
+<td>Linear move (extruding or not)</td>
+</tr>
+<tr>
+<td>G2</td>
+<td>Clockwise arc move</td>
+</tr>
+<tr>
+<td>G3</td>
+<td>Counterclockwise arc move</td>
+</tr>
+<tr>
+<td>G4</td>
+<td>Dwell / pause for a set time</td>
+</tr>
+<tr>
+<td>G10</td>
+<td>Retract filament (firmware retract)</td>
+</tr>
+<tr>
+<td>G11</td>
+<td>Recover filament after G10</td>
+</tr>
+<tr>
+<td>G20</td>
+<td>Set units to inches</td>
+</tr>
+<tr>
+<td>G21</td>
+<td>Set units to millimeters</td>
+</tr>
+<tr>
+<td>G28</td>
+<td>Home one or more axes</td>
+</tr>
+<tr>
+<td>G29</td>
+<td>Auto bed leveling / mesh bed leveling</td>
+</tr>
+<tr>
+<td>G90</td>
+<td>Absolute positioning</td>
+</tr>
+<tr>
+<td>G91</td>
+<td>Relative positioning</td>
+</tr>
+<tr>
+<td>G92</td>
+<td>Set current position (including extruder)</td>
+</tr>
+<tr>
+<td>G94</td>
+<td>Feedrate per minute (CNC style)</td>
+</tr>
+<tr>
+<td>G95</td>
+<td>Feedrate per revolution (CNC style)</td>
+</tr>
+<tr>
+<td>;</td>
+<td>Comment (ignored by printer)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="m-codes-machine-extruder-misc">M-Codes (Machine / Extruder /
+Misc)</h3>
+<h4 id="temperature-control">Temperature Control</h4>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>M104</td>
+<td>Set hotend temperature (no wait)</td>
+</tr>
+<tr>
+<td>M109</td>
+<td>Set hotend temperature and wait</td>
+</tr>
+<tr>
+<td>M140</td>
+<td>Set bed temperature (no wait)</td>
+</tr>
+<tr>
+<td>M190</td>
+<td>Set bed temperature and wait</td>
+</tr>
+<tr>
+<td>M303</td>
+<td>PID autotune hotend</td>
+</tr>
+<tr>
+<td>M301</td>
+<td>Set PID parameters</td>
+</tr>
+</tbody>
+</table>
+<h4 id="motion-control">Motion Control</h4>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>M17</td>
+<td>Enable motors</td>
+</tr>
+<tr>
+<td>M18 / M84</td>
+<td>Disable motors / steppers</td>
+</tr>
+<tr>
+<td>M92</td>
+<td>Set steps per mm (X/Y/Z/E)</td>
+</tr>
+<tr>
+<td>M201</td>
+<td>Set max acceleration</td>
+</tr>
+<tr>
+<td>M203</td>
+<td>Set max feedrate</td>
+</tr>
+<tr>
+<td>M204</td>
+<td>Set acceleration</td>
+</tr>
+<tr>
+<td>M205</td>
+<td>Advanced settings (jerk, acceleration)</td>
+</tr>
+<tr>
+<td>M220</td>
+<td>Set speed factor override (%)</td>
+</tr>
+<tr>
+<td>M221</td>
+<td>Set flow factor override (%)</td>
+</tr>
+<tr>
+<td>M900</td>
+<td>Linear advance factor</td>
+</tr>
+</tbody>
+</table>
+<h4 id="filament-extruder">Filament / Extruder</h4>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>M82</td>
+<td>Extruder absolute mode</td>
+</tr>
+<tr>
+<td>M83</td>
+<td>Extruder relative mode</td>
+</tr>
+<tr>
+<td>M200</td>
+<td>Set filament diameter</td>
+</tr>
+<tr>
+<td>M207</td>
+<td>Set firmware retraction parameters</td>
+</tr>
+<tr>
+<td>M208</td>
+<td>Set firmware unretract parameters</td>
+</tr>
+<tr>
+<td>M600</td>
+<td>Filament change (pause &amp; replace)</td>
+</tr>
+<tr>
+<td>G10</td>
+<td>Retract filament</td>
+</tr>
+<tr>
+<td>G11</td>
+<td>Recover filament</td>
+</tr>
+</tbody>
+</table>
+<h4 id="endstops-probes">Endstops / Probes</h4>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>M119</td>
+<td>Endstop status report</td>
+</tr>
+<tr>
+<td>M851</td>
+<td>Set Z-probe offset</td>
+</tr>
+</tbody>
+</table>
+<h4 id="settings-eeprom">Settings / EEPROM</h4>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>M500</td>
+<td>Save settings to EEPROM</td>
+</tr>
+<tr>
+<td>M501</td>
+<td>Load settings from EEPROM</td>
+</tr>
+<tr>
+<td>M502</td>
+<td>Reset settings to firmware defaults</td>
+</tr>
+</tbody>
+</table>
+<h4 id="miscellaneous">Miscellaneous</h4>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>M107</td>
+<td>Turn off fan</td>
+</tr>
+<tr>
+<td>M106</td>
+<td>Turn on fan (optionally set speed)</td>
+</tr>
+<tr>
+<td>M115</td>
+<td>Get firmware version / capabilities</td>
+</tr>
+<tr>
+<td>M907</td>
+<td>Set motor current override</td>
+</tr>
+<tr>
+<td>M911</td>
+<td>Report power loss / recovery info</td>
+</tr>
+<tr>
+<td>M0</td>
+<td>Stop / pause program</td>
+</tr>
+<tr>
+<td>M1</td>
+<td>Optional stop / sleep</td>
+</tr>
+<tr>
+<td>M218</td>
+<td>Set tool offsets (multi-extruder)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="d-printer-g-code-flow-diagram">3D Printer G-code Flow
+Diagram</h4>
+<p><em>Ender-3 / Marlin style</em></p>
+<pre><code>+----------------------------+
+|        Start G-code        |
+|----------------------------|
+| Purpose: Prepare printer   |
+| Key Commands:              |
+|  - G28 → Home axes         |
+|  - G21 → Set units (mm)    |
+|  - G90 → Absolute pos       |
+|  - M140/M190 → Heat bed     |
+|  - M104/M109 → Heat nozzle  |
+|  - G92 → Reset extruder     |
+|  - G1 E → Prime filament    |
++----------------------------+
+            |
+            v
++----------------------------+
+|       Print G-code         |
+|----------------------------|
+| Purpose: Draw object       |
+| Generated by slicer        |
+| Key Features:              |
+|  - G1 X/Y/Z → Move nozzle  |
+|  - G1 E → Extrude filament |
+|  - Layer patterns: walls,  |
+|    infill, support         |
++----------------------------+
+            |
+            v
++----------------------------+
+| Layer Change / Mid-print   |
+|        Commands            |
+|----------------------------|
+| Purpose: Adjust per-layer  |
+| settings (optional)        |
+| Examples:                  |
+|  - M106/M107 → Fan speed    |
+|  - G10/G11 → Retract/recover|
+|  - ; Comments → Layer info  |
++----------------------------+
+            |
+            v
++----------------------------+
+|         End G-code         |
+|----------------------------|
+| Purpose: Safely finish     |
+| Key Commands:              |
+|  - G1 E → Retract filament |
+|  - G1 Z → Lift nozzle      |
+|  - G1 X/Y → Move head away |
+|  - M104 S0 → Turn off hotend|
+|  - M140 S0 → Turn off bed  |
+|  - M84 → Disable motors    |
++----------------------------+
+            |
+            v
++----------------------------+
+|  Comments / Metadata       |
+|----------------------------|
+| Purpose: Documentation      |
+| Examples:                  |
+|  - ; Slicer version         |
+|  - ; Filament used          |
+|  - ; Print time             |
++----------------------------+</code></pre>
+<h4 id="notes">💡 Notes:</h4>
+<ul>
+<li><strong>Start G-code</strong> must always run first to avoid
+collisions or failed prints.<br />
+</li>
+<li><strong>Print G-code</strong> is usually generated by the
+slicer.<br />
+</li>
+<li><strong>Layer change commands</strong> are optional but useful for
+cooling/fan control.<br />
+</li>
+<li><strong>End G-code</strong> ensures the printer is left in a safe
+state.<br />
+</li>
+<li><strong>Comments/metadata</strong> are optional but good for
+tracking prints.</li>
+</ul>
+<h3 id="sample-file">Sample File:</h3>
+<pre class="gcode"><code>; ======== ENDER-3 SAMPLE G-CODE ========
+; Description: Simple square test print (20x20mm)
+; Author: ChatGPT (Generated)
+; --------------------------------------
+
+; --- Printer Setup ---
+G21                 ; Use millimeters
+G90                 ; Absolute positioning
+M82                 ; Extruder absolute mode
+M107                ; Fan off
+
+; --- Heat up ---
+M140 S60            ; Set bed temp to 60°C
+M104 S200           ; Set nozzle temp to 200°C
+M190 S60            ; Wait for bed temp
+M109 S200           ; Wait for nozzle temp
+
+; --- Home and Prep ---
+G28                 ; Home all axes
+G92 E0              ; Reset extruder position
+G1 Z0.2 F1200       ; Move nozzle to layer height
+G1 X10 Y10 F3000    ; Move to start corner
+G1 E5 F200          ; Prime the nozzle
+
+; --- Draw 20x20mm square ---
+G1 X30 Y10 E10 F1500 ; Right edge
+G1 X30 Y30 E15 F1500 ; Top edge
+G1 X10 Y30 E20 F1500 ; Left edge
+G1 X10 Y10 E25 F1500 ; Bottom edge (close square)
+
+; --- Finish Up ---
+G1 E23 F200          ; Retract filament slightly
+G1 Z10 F1200         ; Lift nozzle
+G1 X0 Y220 F3000     ; Move head to back for cooling
+M104 S0              ; Turn off hotend
+M140 S0              ; Turn off bed
+M107                 ; Turn off fan
+M84                  ; Disable steppers
+
+; ======== END OF PRINT ========</code></pre>
+<hr />
+<h1 id="the-meaning-of-extrusion-rate">🧩 The Meaning of “Extrusion
+Rate”</h1>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 22%" />
+<col style="width: 43%" />
+</colgroup>
+<thead>
+<tr>
+<th>Term</th>
+<th>Also called</th>
+<th>What it affects</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>E-steps/mm</strong></td>
+<td>Extruder steps per mm</td>
+<td>How much filament the motor <em>physically pushes</em></td>
+</tr>
+<tr>
+<td><strong>Flow rate / extrusion multiplier</strong></td>
+<td>“Flow” in slicer, M221</td>
+<td>Software correction factor (%)</td>
+</tr>
+<tr>
+<td><strong>Filament diameter compensation</strong></td>
+<td>From measurement or M200</td>
+<td>Changes volumetric flow math</td>
+</tr>
+</tbody>
+</table>
+<p>All three combine to control <strong>how much plastic comes
+out</strong> when you tell the printer to extrude a given length.</p>
+<hr />
+<h1 id="step-1-calibrate-e-stepsmm-mechanical-accuracy">⚙️ Step 1:
+Calibrate <strong>E-steps/mm</strong> (mechanical accuracy)</h1>
+<p>This ensures your printer pushes <em>exactly</em> 100 mm of filament
+when told to.</p>
+<h3 id="what-you-need">🧰 What you need:</h3>
+<ul>
+<li>PLA loaded</li>
+<li>Bed/nozzle heated to printing temp (to reduce back pressure)</li>
+<li>Calipers or ruler</li>
+</ul>
+<h3 id="procedure">🧾 Procedure:</h3>
+<ol type="1">
+<li><p><strong>Mark the filament</strong> 120 mm above the extruder
+entrance.</p></li>
+<li><p>In your terminal (OctoPrint, Repetier, or printer LCD), reset the
+extruder position:</p>
+<pre><code>G92 E0</code></pre></li>
+<li><p>Tell it to extrude 100 mm at a slow rate:</p>
+<pre><code>G1 E100 F100</code></pre></li>
+<li><p>Measure how much filament actually moved:</p>
+<ul>
+<li>If only 95 mm fed, you’re under-extruding.</li>
+<li>If 105 mm fed, you’re over-extruding.</li>
+</ul></li>
+<li><p>Find your current E-steps:</p>
+<pre><code>M503</code></pre>
+<p>Look for a line like
+<code>M92 X80.00 Y80.00 Z400.00 E93.00</code>.</p></li>
+<li><p>Calculate the new value:</p>
+<pre><code>new_Esteps = old_Esteps * (commanded_length / actual_length)</code></pre>
+<p>Example: <code>93 * (100 / 95) = 97.9</code></p></li>
+<li><p>Set and save:</p>
+<pre><code>M92 E97.9
+M500</code></pre></li>
+</ol>
+<p>✅ That locks in mechanical extrusion accuracy.</p>
+<hr />
+<h1 id="step-2-fine-tune-flow-rate-in-slicer">🧩 Step 2: Fine-tune
+<strong>Flow Rate</strong> in Slicer</h1>
+<p>Even with perfect E-steps, filament differences, melt pressure, and
+nozzle diameter change real flow.</p>
+<h3 id="quick-method">🧾 Quick method:</h3>
+<ol type="1">
+<li><p>Slice a <strong>single-wall cube</strong> (0 % infill, 1
+perimeter, 0.2 mm layer).</p></li>
+<li><p>Print it and measure wall thickness with calipers.</p></li>
+<li><p>Compare to your slicer’s expected line width (e.g., 0.4
+mm).</p></li>
+<li><p>Adjust the <strong>Flow / Extrusion Multiplier</strong>:</p>
+<ul>
+<li><p>New flow = (desired thickness / measured thickness) × 100
+%.</p></li>
+<li><p>In Cura: <em>Material → Flow %</em>.</p></li>
+<li><p>In Marlin:</p>
+<pre><code>M221 S&lt;new flow percent&gt;</code></pre>
+<p>(e.g., <code>M221 S95</code> for 95 %)</p></li>
+</ul></li>
+</ol>
+<p>Repeat until wall thickness matches the slicer’s target.</p>
+<hr />
+<h1 id="step-3-verify-with-real-prints">🧩 Step 3: Verify with Real
+Prints</h1>
+<ul>
+<li>Print a <strong>20 × 20 × 20 mm calibration cube</strong>.</li>
+<li>Measure dimensions and top solid layers.</li>
+<li>Adjust flow ±1 % if tops look over- or under-filled.</li>
+</ul>
+<hr />
+<h1 id="summary-table">🧮 Summary Table</h1>
+<table>
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 28%" />
+<col style="width: 19%" />
+<col style="width: 19%" />
+</colgroup>
+<thead>
+<tr>
+<th>Calibration Type</th>
+<th>Command(s)</th>
+<th>Where Set</th>
+<th>Typical Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>E-steps/mm</strong></td>
+<td><code>M92 E###</code> + <code>M500</code></td>
+<td>Firmware</td>
+<td>93 – 100</td>
+</tr>
+<tr>
+<td><strong>Flow rate</strong></td>
+<td><code>M221 S###</code></td>
+<td>G-code/Slicer</td>
+<td>95 – 105 %</td>
+</tr>
+<tr>
+<td><strong>Filament diameter</strong></td>
+<td><code>M200 D1.75</code></td>
+<td>G-code</td>
+<td>1.75 mm</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="tips">🧠 Tips</h1>
+<ul>
+<li>Re-check E-steps if you change extruder hardware (gears, direct
+drive).</li>
+<li>Use <strong>slow extrusion speed (F100–F200)</strong> for
+calibration to avoid pressure lag.</li>
+<li>Keep filament at stable temperature/humidity; wet filament skews
+flow.</li>
+<li>Cura’s “Flow” and Marlin’s <code>M221</code> are additive — don’t
+double-compensate.</li>
+</ul>
+<pre class="gcode"><code>    ; ===============================
+    ; Ender-3 Extruder Calibration Test
+    ; Purpose: Check 100 mm extrusion for E-steps/mm
+    ; Filament: PLA
+    ; Nozzle: 200°C, Bed: 60°C
+    ; ===============================
+
+    ; --- Start G-code ---
+    G21             ; Units in mm
+    G90             ; Absolute positioning
+    M82             ; Extruder absolute mode
+    M107            ; Fan off
+    M140 S60        ; Set bed temperature 60°C
+    M190 S60        ; Wait for bed temp
+    M104 S200       ; Set nozzle temperature 200°C
+    M109 S200       ; Wait for nozzle temp
+    G28             ; Home all axes
+    G92 E0          ; Reset extruder position
+
+    ; --- Move to safe position ---
+    G1 X10 Y10 Z0.2 F3000 ; Move to front-left corner, first layer height
+
+    ; --- Prime the nozzle ---
+    G1 E5 F200          ; Extrude 5 mm filament slowly to prime
+    G4 S2               ; Pause 2 seconds
+
+    ; --- Extrusion test ---
+    ; This command extrudes 100 mm at a slow speed
+    ; Measure filament before and after to check accuracy
+    G1 E100 F100        ; Extrude 100 mm filament slowly
+    G4 S2               ; Pause 2 seconds
+
+    ; --- Retract filament slightly ---
+    G1 E95 F200         ; Retract 5 mm to prevent oozing
+
+    ; --- End G-code ---
+    G1 Z10 F1200        ; Lift nozzle
+    G1 X0 Y220 F3000    ; Move head away
+    M104 S0             ; Turn off nozzle
+    M140 S0             ; Turn off bed
+    M107                ; Turn off fan
+    M84                 ; Disable motors
+
+    ; ===============================
+    ; End of Extruder Calibration Test
+    ; ===============================</code></pre>
+<h3 id="e-is-cumulative-filament-extrusion"><strong>1️⃣ E is cumulative
+filament extrusion</strong></h3>
+<ul>
+<li>After calibration, the printer knows <strong>exactly how much
+filament corresponds to a given length of nozzle travel</strong>.</li>
+<li>So when you write:</li>
+</ul>
+<pre class="gcode"><code>G1 X100 Y100 E0 F3000
+G1 X105 Y105 E1 F3000</code></pre>
+<p>It means:</p>
+<ol type="1">
+<li>Move the nozzle to <code>X100 Y100</code> — don’t extrude anything
+yet (<code>E0</code>).</li>
+<li>Move to <code>X105 Y105</code> while extruding <strong>1 mm of
+filament</strong>.</li>
+</ol>
+<p>✅ The printer will push exactly <strong>1 mm of filament</strong>
+over that diagonal distance.</p>
+<hr />
+<h3 id="how-the-slicer-calculates-e"><strong>2️⃣ How the slicer
+calculates E</strong></h3>
+<p>The slicer automatically calculates <code>E</code> using this
+formula:</p>
+<p><span class="math display">$$
+E = \frac{\text{Distance} \times \text{Layer Height} \times \text{Line
+Width}}{\text{Filament Cross-Sectional Area}}
+$$</span></p>
+<p>Where:</p>
+<ul>
+<li><strong>Distance</strong> = nozzle movement in XY (or XYZ if
+diagonal)</li>
+<li><strong>Layer Height</strong> = layer thickness (e.g., 0.2 mm)</li>
+<li><strong>Line Width</strong> = extrusion width (e.g., 0.4 mm)</li>
+<li><strong>Filament Area</strong> = π × (diameter / 2)² (for 1.75 mm
+filament, area ≈ 2.405 mm²)</li>
+</ul>
+<p>This converts <strong>movement distance into filament
+length</strong>.</p>
+<hr />
+<h3 id="example-calculation"><strong>3️⃣ Example
+Calculation</strong></h3>
+<ul>
+<li>Move diagonally from <code>(100,100)</code> →
+<code>(105,105)</code></li>
+<li>Distance = √((105−100)² + (105−100)²) = √(25+25) = √50 ≈ 7.07
+mm</li>
+<li>Layer height = 0.2 mm</li>
+<li>Line width = 0.4 mm</li>
+<li>Filament diameter = 1.75 mm → Area ≈ 2.405 mm²</li>
+</ul>
+<p><span class="math display">$$
+E = \frac{7.07 \times 0.2 \times 0.4}{2.405} \approx 0.235 \text{ mm of
+filament}
+$$</span></p>
+<ul>
+<li>So in reality, for a <strong>small move like that</strong>, your
+<code>E</code> would be <strong>much smaller than 1 mm</strong>, unless
+you’re exaggerating for example purposes.</li>
+</ul>
+<hr />
+<h3 id="key-points"><strong>4️⃣ Key Points</strong></h3>
+<ol type="1">
+<li><strong>E only increases when you want extrusion</strong> — travel
+moves keep E constant.</li>
+<li><strong>E value depends on nozzle width, layer height, and filament
+diameter</strong> — slicer calculates this for you.</li>
+<li>If your printer is calibrated (correct E-steps and flow), you don’t
+need to guess E manually — slicer handles it perfectly.</li>
+</ol>
+<hr />
+<p>💡 <strong>Tip for manual G-code:</strong></p>
+<ul>
+<li>For test prints or small shapes, you can calculate <code>E</code>
+using the formula above.</li>
+<li>For real objects, let the slicer generate precise E values — it’s
+much easier.</li>
+</ul>
+<hr />
+<blockquote>
+<p>Template generated by ChatGPT<br />
+Documentation generated by <a
+href="https://padsrepo.github.io/pads/#paddocs">PADDOCS</a><br />
+Compendium section: 19-blog<br />
+Title: G-Code Cheat Sheet<br />
+Author: Joe Corso<br />
+Tags: ender-3, creality, 3d printer, gcode, mcode<br />
+Status: <strong>Final</strong><br />
+Post ID: 01-gcode.md<br />
+Template: 00-blog.md License: “All Rights Reserved”<br />
+Schema: articles<br />
+Version: 1.0.0<br />
+Branding: Mindmap</p>
+</blockquote>
+</body>
+</html>
