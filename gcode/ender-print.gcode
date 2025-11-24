@@ -1,0 +1,77 @@
+; Any text that comes after a semicolon is a comment and will not be parsed
+G28 ; This sends the printer home
+G21
+G90
+M82
+M106 ; Turn on the fan
+M140 S60
+M104 S200
+M190 S60
+M109 S200
+G92 E0
+G0 X0 Y0
+G1 Z0.2 F1200
+G1 X100 Y100 F3000
+G1 E6 F200
+G1 X125 Y100 E10 F3000
+G1 X125 Y125 E14 F3000
+G1 X100 Y125 E18 F3000
+G1 X100 Y100 E22 F3000
+
+; This is a comment
+; This is the infill on the first layer. This will start at the bottom left -> top right. Notice the pattern when moving in this direction
+G1 X105 Y100 E22 F3000
+G1 X100 Y105 E23 F3000
+G1 X100 Y110 E24 F3000
+G1 X110 Y100 E25 F3000
+G1 X115 Y100 E26 F3000
+G1 X100 Y115 E27 F3000
+G1 X100 Y120 E28 F3000
+G1 X120 Y100 E29 F3000
+G1 X125 Y100 E30 F3000
+G1 X100 Y125 E31 F3000 ; This is the top left corner of the box, and going back the other way now.
+G1 X105 Y125 E32 F3000
+G1 X125 Y105 E33 F3000
+G1 X125 Y110 E34 F3000
+G1 X110 Y125 E35 F3000
+G1 X115 Y125 E36 F3000
+G1 X125 Y115 E37 F3000
+G1 X125 Y120 E38 F3000
+G1 X120 Y125 E39 F3000
+
+; This builds the second layer
+G1 Z0.4 F1200
+G1 X125 Y125 E40 F3000
+G1 X100 Y125 E41 F3000
+G1 X100 Y100 E42 F3000
+G1 X125 Y100 E43 F3000
+G1 X125 Y125 E44 F3000
+
+; This is the infill on the second layer. This will start at the top right -> bottom left. Notice the pattern when moving in this direction
+G1 X105 Y125 E45 F3000
+G1 X100 Y120 E46 F3000
+G1 X100 Y115 E47 F3000
+G1 X110 Y125 E48 F3000
+G1 X115 Y125 E49 F3000
+G1 X100 Y110 E50 F3000
+G1 X100 Y105 E51 F3000
+G1 X120 Y125 E52 F3000
+G1 X125 Y125 E53 F3000
+G1 X100 Y100 E54 F3000 ; This is the top right corner, and going back the other way now.
+G1 X105 Y100 E55 F3000
+G1 X125 Y120 E56 F3000
+G1 X125 Y115 E57 F3000
+G1 X110 Y100 E58 F3000
+G1 X115 Y100 E59 F3000
+G1 X125 Y110 E60 F3000
+G1 X125 Y105 E61 F3000
+G1 X120 Y100 E62 F3000
+G1 X125 Y105 E63 F3000
+
+; Ending touches
+G1 E61 F1200 ; Retract filament some
+G1 X125 Y105 Z25 ; Move out of the way
+M140 S0 ; Turn off hotend and bed
+M104 S0
+M107 ; Turn off the fan
+M84 ; Disable Steppers

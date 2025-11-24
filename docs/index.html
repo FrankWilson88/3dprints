@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="paddocs" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Joe Corso" />
+  <meta name="keywords" content="automation, pads, documentation, framework, bash, python, DevOps, System
+Administration, Web Development, Flask, NGINX, uWSGI, Arch Linux, Home
+Lab" />
+  <title>Technical Documentation</title>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true }); // This tells Mermaid to automatically render diagrams on page load
+  </script>
+    <style>
+    html {
+      font-family: Fira Code;
+      font-size: 10pt;
+      line-height: 1;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: blue;
+    }
+    a:visited {
+      color: blue;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    div.abstract {
+      margin: 2em 2em 2em 2em;
+      text-align: left;
+      font-size: 85%;
+    }
+    div.abstract-title {
+      font-weight: bold;
+      text-align: center;
+      padding: 0;
+      margin-bottom: 0.5em;
+    }
+    code {
+      font-family: Fira Code;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    body{max-width: 90em;}
+    .dedication{font-size: 85%; display: block; margin: 2em 2em 2em 2em; text-align: center;}
+    .dedication-title{text-align: center;}
+    .dedication-title:before{content: "Dedication"; font-weight: bold}
+    .preface-title:before{content: "Preface"; font-weight: bold;}
+    footer, footer small{clear: both; float: left;}
+    #TOC {
+    position: fixed;
+    width: 20em;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background-color: lightblue;
+    overflow-y: scroll;
+    padding: 1em;
+    }
+    @media only screen and (max-width: 600px) {
+    body {
+        font-size: 0.9em;
+        padding: 12px;
+    }
+    h1 {
+        font-size: 1.8em;
+    }
+    #TOC {
+        display: block;
+        position: static;
+        background-color: white;
+    }
+    }
+  </style>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Technical Documentation</h1>
+<p class="subtitle">Guides, Source Code, Syntax</p>
+<p class="author">Joe Corso</p>
+<p class="date">May, 24, 2024</p>
+<div class="abstract">
+<div class="abstract-title">Abstract</div>
+<p>Reports, Source Code, Syntax on my personal Computer Science
+research</p>
+</div>
+</header>
+<nav id="TOC" role="doc-toc">
+ <a href="01-gcode.md">Blog</a>
+</nav>
+<h1 id="project-makeme">Project MakeMe</h1>
+<h2 id="project-proposal">Project Proposal</h2>
+<h3 id="project-title">Project Title</h3>
+<p>MakeMe</p>
+<h3 id="authors">Author(s)</h3>
+<p>Joe Corso - Lead Developer</p>
+<h3 id="date">Date</h3>
+<p>2025-11-15</p>
+<h3 id="problem-statement">Problem Statement</h3>
+<p>[Describe the problem this project solves]</p>
+<h3 id="objectives">Objectives</h3>
+<p>[List the main objectives]</p>
+<h3 id="scope">Scope</h3>
+<p>[Define the boundaries of the project: what’s included/excluded]</p>
+<h3 id="benefits">Benefits</h3>
+<p>[Key benefits and value proposition]</p>
+<h3 id="risks-challenges">Risks &amp; Challenges</h3>
+<p>[Potential issues and mitigation plans]</p>
+<h3 id="resources-needed">Resources Needed</h3>
+<ul>
+<li>Creality Ender-3</li>
+</ul>
+<h3 id="approval">Approval</h3>
+<p>[Sign-off or decision to proceed]</p>
+<h2 id="project-overview">Project Overview</h2>
+<h3 id="purpose">Purpose</h3>
+<h3 id="background">Background</h3>
+<p>NA</p>
+<h3 id="overview">Overview</h3>
+<h3 id="key-features">Key Features</h3>
+<h3 id="target-audience">Target Audience</h3>
+<h3 id="expected-impact">Expected Impact</h3>
+<p>NA</p>
+<h2 id="design-report">Design Report</h2>
+<h3 id="architecture-overview">Architecture Overview</h3>
+<ul>
+<li><strong>Board</strong>: Raspberry Pi 3B (ARMv8, 1GB RAM)</li>
+<li><strong>Storage</strong>: 64GB SD card (boot/root), optional USB SSD
+for persistent storage</li>
+<li><strong>Power</strong>: 5V micro-USB power adapter</li>
+<li><strong>Cooling</strong>: Passive heatsink or low-noise fan</li>
+<li><strong>Networking</strong>: Ethernet preferred; Wi-Fi fallback</li>
+</ul>
+<h3 id="technology-stack">Technology Stack</h3>
+<ul>
+<li>Git server via <code>git-shell</code> or <code>gitea</code></li>
+<li>Documentation served via paddocs-generated HTML</li>
+<li>Network tools (ping, traceroute, nmap, etc.)</li>
+<li>Remote backup target via <code>rsync</code> or
+<code>restic</code></li>
+<li>Flask/Python app testing for local development</li>
+<li>Jellyfin for media</li>
+</ul>
+<h3 id="data-flow">Data Flow</h3>
+<p>[How data moves through the system, with diagrams if needed]</p>
+<h3 id="bill-of-materials">Bill of Materials</h3>
+<blockquote>
+<p>Build Date: 2025-07-09<br />
+Designed for: <code>llama.cpp</code> (3B–7B CPU Inference), Arch Linux,
+Headless/Server Ready<br />
+Estimated Power: ~150W max (CPU-only), ~300W w/ GPU<br />
+Target Use: Local LLMs, PADS builder, dev server</p>
+</blockquote>
+<h4 id="components">Components</h4>
+<table>
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 21%" />
+<col style="width: 42%" />
+<col style="width: 26%" />
+</colgroup>
+<thead>
+<tr>
+<th>Qty</th>
+<th>Component</th>
+<th>Model / Description</th>
+<th>Price (USD)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>CPU</strong></td>
+<td>AMD Ryzen 5 5500 – 6-core, 12-thread Zen 3 (w/ Wraith Stealth
+Cooler)</td>
+<td>$62.00</td>
+</tr>
+<tr>
+<td>1</td>
+<td><strong>Motherboard</strong></td>
+<td>MSI PRO B550M-VC WiFi (mATX, AM4, PCIe 4.0, WiFi 6E, BT 5.2)</td>
+<td>$75.99</td>
+</tr>
+<tr>
+<td>1</td>
+<td><strong>RAM</strong></td>
+<td>Crucial Pro 32GB (2×16GB) DDR4-3200 UDIMM</td>
+<td>$74.99</td>
+</tr>
+<tr>
+<td>1</td>
+<td><strong>NVMe SSD</strong></td>
+<td>Crucial P3 Plus 1TB PCIe Gen4 (M.2 2280)</td>
+<td>$61.90</td>
+</tr>
+<tr>
+<td>1</td>
+<td><strong>HDD</strong></td>
+<td>Seagate Exos 7E8 4TB 7200RPM SATA (Renewed)</td>
+<td>$64.88</td>
+</tr>
+<tr>
+<td>1</td>
+<td><strong>Case</strong></td>
+<td>Cooler Master MasterBox Q300L (mATX, filtered, compact)</td>
+<td>$39.99</td>
+</tr>
+<tr>
+<td>1</td>
+<td><strong>PSU</strong></td>
+<td>ARESGAME AGV 500W 80+ Bronze, non-modular</td>
+<td>$37.99</td>
+</tr>
+<tr>
+<td>1</td>
+<td><strong>Case Fans</strong></td>
+<td>DARKROCK 120mm x3, 3-pin, 1200 RPM, low-noise</td>
+<td>$8.99</td>
+</tr>
+</tbody>
+</table>
+<h4 id="total">Total</h4>
+<p><strong>Estimated Total</strong>: <code>$426.73</code></p>
+<blockquote>
+<p>All prices are approximate from Amazon as of July 2025. Tax/shipping
+not included.</p>
+</blockquote>
+<h4 id="optional-not-included">Optional (Not Included)</h4>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1–2x SATA cable</td>
+<td>For HDD if none included</td>
+</tr>
+<tr>
+<td>HDMI/DP cable</td>
+<td>For external monitor output</td>
+</tr>
+<tr>
+<td>USB stick (8GB)</td>
+<td>For initial Arch bootloader</td>
+</tr>
+</tbody>
+</table>
+<h4 id="bom-metadata">BOM Metadata</h4>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">project</span><span class="kw">:</span><span class="at"> llama-arch-box</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span><span class="kw">:</span><span class="at"> 2025-07-09</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">format</span><span class="kw">:</span><span class="at"> markdown</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">target_model</span><span class="kw">:</span><span class="at"> llama.cpp q4/q5 (3B–7B)</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ram_min</span><span class="kw">:</span><span class="at"> 16GB</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ram_recommended</span><span class="kw">:</span><span class="at"> 32GB</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">gpu_required</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span></code></pre></div>
+<h3 id="directory-structure">Directory Structure</h3>
+<pre class="plaintext"><code>/mnt
+├── media        # Jellyfin Server
+│   ├── games
+│   ├── movies
+│   ├── music
+│   ├── pics
+│   └── shows
+└── repo
+    ├── archive  # Backups
+    ├── code     # Libs used for RPi
+    └── git      # Local Repo</code></pre>
+<h3 id="uiux-design">UI/UX Design</h3>
+<p>[Wireframes, mockups, or descriptions of user interactions] ###
+Security Considerations</p>
+<ul>
+<li>All remote access via SSH with key authentication</li>
+<li>Encrypted backups and secrets stored under <code>vault/</code></li>
+<li>Minimal services exposed; firewall configured with
+<code>ufw</code></li>
+</ul>
+<h3 id="scalability-plan">Scalability Plan</h3>
+<ul>
+<li>Add Pi-hole, local DNS or DHCP</li>
+<li>Integrate ZeroTier or Tailscale for remote VPN</li>
+<li>Deploy model evaluation or inference client</li>
+<li>Expand with external SSD, NAS, or other SBCs</li>
+</ul>
+<h2 id="technical-report">Technical Report</h2>
+<h3 id="introduction">Introduction</h3>
+<p>Provide background information, objectives, and the scope of the
+technical work.</p>
+<h3 id="problem-statement-1">Problem Statement</h3>
+<p>Clearly define the technical challenge or need that this report
+addresses.</p>
+<h3 id="methodology">Methodology</h3>
+<p>Describe the processes, tools, and technologies used to address the
+problem.<br />
+Include diagrams, charts, or pseudocode if applicable.</p>
+<h3 id="implementation-details">Implementation Details</h3>
+<p>Explain how the solution was developed or executed.<br />
+List hardware, software, configurations, or environments used.</p>
+<h3 id="results">Results</h3>
+<p>Present the findings, data, or performance outcomes of the technical
+work.<br />
+Include tables, graphs, or screenshots where relevant.</p>
+<h3 id="analysis">Analysis</h3>
+<p>Interpret the results and discuss their significance.<br />
+Highlight successes, issues, and unexpected outcomes.</p>
+<h3 id="challenges-limitations">Challenges &amp; Limitations</h3>
+<p>List any technical constraints, risks, or difficulties
+encountered.</p>
+<h3 id="recommendations">Recommendations</h3>
+<p>Suggest improvements, next steps, or further areas of research.</p>
+<h3 id="conclusion">Conclusion</h3>
+<p>Summarize the technical achievements and how they meet the project
+goals.</p>
+<h3 id="references">References</h3>
+<p>List all technical references, standards, and documentation
+sources.</p>
+<h2 id="research-log">Research Log</h2>
+<p>“Running record of steps, discoveries, and next actions.”</p>
+<hr />
+<h3 id="section">2025-11-14</h3>
+<p><a href="#2025-11-21">Next →</a></p>
+<h4 id="summary">Summary</h4>
+<p>Setting up the Ender-3 after it’s been sitting in the closet for
+about a year. The firmware was wiped in a catastrophic boating
+accident.</p>
+<h4 id="steps-taken">Steps Taken</h4>
+<ol type="1">
+<li>Find the firmware needed for the 3d printer. In my case the Ender-3.
+The firmware can be found on the manufacturers website. Mine is <a
+href="https://www.crealitycloud.com/downloads/firmware/ender-series/ender-3"
+title="Creality Website">here</a>. We’re gonna go with the factory
+firmware.</li>
+</ol>
+<blockquote>
+<p>[!NOTE]<br />
+You need to put the URL in quotes since the geniuses over at Creality
+decided to use spaces in the filename. Or insert %20</p>
+</blockquote>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>    <span class="ex">$</span> wget <span class="st">&quot;https://file2-cdn.creality.com/file/b7da70b1c1352a5ca1eb40b83e7e3c0e/Ender-3  Marlin2.0.6 Factory firmware.zip&quot;</span></span></code></pre></div>
+<ol start="2" type="1">
+<li>Unzip the file</li>
+</ol>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>    <span class="ex">$</span> unzip <span class="st">&quot;Ender-3  Marlin2.0.6 Factory firmware.zip&quot;</span></span></code></pre></div>
+<ol start="3" type="1">
+<li>Mount and copy to SD Card</li>
+</ol>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>    <span class="ex">$</span> sudo mount /dev/sd<span class="pp">*</span> /mnt</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># For some reason there are 2 spaces between Ender-3__Marlin* (Because China)</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">$</span> sudo cp Downloads/<span class="st">&quot;Ender-3  Marlin2.0.6 Factory firmware</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="st">Ender-3Marlin2.0.6HW4.2.2.bin&quot;</span> /mnt</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">$</span> sudo umount /dev/sd<span class="pp">*</span></span></code></pre></div>
+<ol start="4" type="1">
+<li><p>Insert the card into the 3d printer, and turn it on. The printer
+will auto detect the .bin file, and install the firmware.</p></li>
+<li><p>Turn off the printer, remove the SD Card, and turn the printer
+back on to ensure the firmware is installed correctly.</p></li>
+<li><p>For a beginner test print, we will use <a
+href="https://3dgo.app/slicer" title="3dgo.app">this website</a> as our
+slicer program. I used this <a
+href="https://www.thingiverse.com/thing:1278865"
+title="iDig3Dprinting">XYZ 20mm Calibration Cube</a> as a test. Download
+the .stl.</p></li>
+<li><p>Open the webpage above. Hover over <code>files</code> and click
+import. Hover over <code>start</code> click slice, then export. You
+should get a .gcode file.</p></li>
+<li><p>Mount the SD Card again. Remove the .bin file. Copy the .gcode
+file to the SD Card. Unmount the SD Card</p></li>
+</ol>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>    <span class="ex">$</span> sudo mount /dev/sd<span class="pp">*</span> /mnt</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="ex">$</span> sudo rm /mnt/<span class="pp">*</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">$</span> sudo cp ~/Downloads/<span class="pp">*</span>.gcode /mnt</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">$</span> sudo umount /dev/sd<span class="pp">*</span></span></code></pre></div>
+<ol start="9" type="1">
+<li><p>Insert the SD Card into the printer. Level the bed, as explained
+<a href="https://3dsolved.com/ender-3-how-to-level-the-bed/"
+title="How to level a bed">here</a>.</p></li>
+<li><p>Select <code>Print from Card</code> on the printer. It will start
+the print. Watch the first few layers for inconsistencies, and either
+adjust or stop the print and re-level the bed.</p></li>
+</ol>
+<h4 id="observations-notes">Observations &amp; Notes</h4>
+<ul>
+<li>I printed the bottom half of RPi case. The spacers are messy, and
+it’s stringy.</li>
+<li>I’d like to build a server rack.</li>
+</ul>
+<h4 id="problems-challenges">Problems / Challenges</h4>
+<ul>
+<li>On the first test prints, the first layers were turning out fine.
+But as it went up it would make a loud knocking sound, and print would
+start to run off to the side. This told me the z-axis was off. Sure
+enough the tension screws holding the rod in place were so lose they
+were almost falling out. I tightened the screws and checked to make sure
+it was center. it was about 2 degrees off center. I adjusted to make it
+plumb, and each print was fine after that.</li>
+</ul>
+<h4 id="next-actions">Next Actions</h4>
+<ul>
+<li>Learn to make minor adjustments</li>
+<li>Print something more advanced</li>
+<li>Learn Blender and Slic3r.</li>
+</ul>
+<hr />
+<h3 id="section-1">2025-11-21</h3>
+<p><a href="#2025-11-14">← Previous</a> | <a href="#2025-11-22">Next
+→</a></p>
+<h4 id="summary-1">Summary</h4>
+<p>Test z axis.<br />
+I’ve been having trouble with a Cigarette Case print. The taller it
+prints, The further off it goes. I’m thinking it’s the print, not the z
+axis. But it’s work a check.</p>
+<h4 id="steps-taken-1">Steps Taken</h4>
+<ol type="1">
+<li>Ensure all screws snug.<br />
+</li>
+<li>Ensure the threaded rod is 0 degrees.<br />
+</li>
+<li>Download <a href="https://www.thingiverse.com/thing:524906/files"
+title="Tall Test Print">this</a> test print.<br />
+</li>
+<li>Level the bed and start print.</li>
+</ol>
+<h4 id="observations-notes-1">Observations &amp; Notes</h4>
+<ul>
+<li>Turned out well. The .gcode file is what’s messed up.</li>
+</ul>
+<h4 id="problems-challenges-1">Problems / Challenges</h4>
+<ul>
+<li>The z axis cannot be off center.<br />
+</li>
+<li>Any/All screws must be snug, Not over tightened, Not too loose.</li>
+</ul>
+<h4 id="next-actions-1">Next Actions</h4>
+<p>I’ve leveled the bed, and sliced .STL’s, so I think it’s time to
+learn g-code, m-code blender and slicer.</p>
+<hr />
+<h3 id="section-2">2025-11-22</h3>
+<p><a href="#2025-11-21">← Previous</a> | <a href="#2025-11-24">Next
+→</a></p>
+<h4 id="summary-2">Summary</h4>
+<p>Today I’m going to run through a quick g-code, and m-code tutorial.
+Unfortunately, I’ve only given my OS partition 64GB, so with LLM models,
+on top of Blender, and Slic3r I don’t have any space left. I can finagle
+things and such of course. But with so much restructuring, and add the
+repo and such; I’m going to just reinstall the OS. That is outside the
+scope of this research, and will be done on my own time. But is still
+worth noting. I’ll wrap back around to Blender, and Slic3r later.</p>
+<h4 id="steps-taken-2">Steps Taken</h4>
+<ol type="1">
+<li>Found this tutorial <a
+href="https://cnccode.com/2025/05/10/cnc-g-code-programming-complete-guide-beginner-to-advanced-2025-edition/"
+title="cnccode.com">here</a><br />
+</li>
+<li>Generated <a href="#g-code-cheat-sheet"
+title="G-code Cheat Sheet">this blog</a><br />
+</li>
+<li>Create my first square.<br />
+&gt; [!NOTE]<br />
+&gt; This should set the Home coordinates to x0y0z0(expressed as x,y,z
+not xN yN zN), enable absolute mode, set the hotend to 0,0,0. Heat the
+bed to 60 degrees F. Heat the extruder to 200 degrees F. Set the
+extrusion rate to 0, and set the home axis to 0,0 This would actually
+make a right angle that is 20 inches by 20 inches. This is wrong.</li>
+</ol>
+<pre class="gcode"><code>    G28 ; home the cnc machine. (i.e. move until you hit the sensors)
+    G20 ; This line tells the computer to use inches not mm (G20/G21)
+    G90 ; This tells the computer to measure each distance relative to the 0,0 position. It&#39;s called absolute positioning. There is relative positioning as well.
+    M82 ; this line tells the extruder itself to start in absolute positioning as well.
+    M140 S60 ; this section tells the bed and hotend to heat up to temp, and stay at the temp to follow further instructions. (This line is the hotend)
+    M104 S200 ; This line heats up the bed
+    M109 S60 ; This line says to keep the hotend at this temp, and continue with new commands
+    M190 S200 ; This line says to keep the bed at this temp, and continue with new commands
+    G92 E0 ; This sets the current position and extruder to 0,0,0 (essentially, set the bed, set the extruder, define the x,y,z axis, so the bed is x,y the extruder is z, and set the extrusion rate to 0)
+    G0 X0 Y0 ; this is telling the computer, &quot;where you are is the default 0,0,0 spot. regardless of everything else.&quot;
+    G1 Z0.2 F1200 ; this is telling the extruder to move to 0.2 mm above the bed with a feed rate of 1200 mm/min. remember, this could change. for this line imagine auto bed leveling, it&#39;s saying this is the distance from the bed i need to start feeding the extruder. So if a piece of paper is 0.2mm, add 0.2mm from that, and this is where we start to print. if your printer line beads up, change this line.
+    G1 X10 Y10 F3000 ; (my first mistake) this sets the default coordinate at 10 inches by 10 inches on the bed. with absolute coordinates, it draws a line from 0,0 to 10,10. we don&#39;t want that. because we want the base of the object at 10,10. the problem is, your bed is only 9x9 and 8x8 of usable space. So it shoots the design off into the void, and draws a line from your original home (G28). into another void that ends no where, because the end is not defined.
+    G1 E6 F200
+    G1 X20 Y10 E10 F3000
+    G1 X20 Y20 E10 F3000
+    G1 X-20 Y20 E10 F3000 ; at this point the line should shoot off into no where (the void) because we assume we want to subtract 20 inches to return to zero (the 10 spot), but infact, it sends us to the negative 20 x axis. so if the corner we started at was 0,0, we tell the printer to go to -20,0. this shoots the line we run; into a spot that the cad software will not zoom to, or maybe, bu it won&#39;t make sense.
+    G1 X-20 Y-20 E10 F3000
+    ; Copy and past all of this text to Notepad, into a slicer program, and you will see that is does not throw an error from all these comments, but it makes some weird lines.</code></pre>
+<ol type="1">
+<li>I was using the slicer to see what the machine was assuming i meant.
+and to see adding comments, which didn’t throw an error. When I changed
+the settings to mm(G21) it readjusted a lot better. Not because the code
+was “wrong” but because all cad software measures in mm. so when i
+measure in inches the cad software adjusts, but since my math sucks its
+not exact, and it throws the equations into the void. so this is mm not
+inches.</li>
+</ol>
+<pre class="gcode"><code>    G28 ; We determined the home coordinates here.
+    G21; Tell the machine to use mm
+    G90
+    M82
+    M140 S60
+    M104 S200
+    M109 S60
+    M190 S200
+    G92 E0
+    G0 X0 Y0 ; notice this is the starting point. so it should draw a line from 0,0 to 100,100. this is where my assumptions start.
+    G1 Z0.2 F1200 ; this tells the printer to move the z axis to 0.2, or, 0.2mm above where you leveled the bed.
+    G1 X100 Y100 F3000 ; this is where it draws a line to the 100,100 spot. Notice there is not extrusion rate, therefore it will not feed filament to the starting corner of the box.
+    G1 E6 F200 ; at this point we set the extrusion rate to 6. we can set it to a lower level, so that later extrusions do not cause collisions. remember, the extrusion rates is compared to the feed rate.
+    G1 X125 Y100 E10 F3000 ; we move the extruder and bed to match an axis of x,y,z along the way, the extruder should send 4 more mm of filament, at a rate of 3000 mm per minute.
+    G1 X125 Y125 E10 F3000 ; at this point, the extruder will move in a right angle, but the extruder will not output more filament, because you are telling it to feed the same 10mm at a rate of 3000 mm/min. it will not feed more filament, because the extrusion is stuck at 10!
+    G1 X100 Y125 E10 F3000 ; this will finish the left size  of the box with no extrusion.
+    G1 X100 Y100 E10 F3000 ; this will bring it back to it&#39;s original (although off from the start) 0,0 point, without actually printing anything.
+    ; So if you imagine the filament like a ruler, It extruded to 10 inches, and then stayed at 10 inches. So we used 10 inches of filament for the first side, and then stopped.
+    ; This will draw a box but not the infill.</code></pre>
+<h4 id="observations-notes-2">Observations &amp; Notes</h4>
+<ul>
+<li>It makes a square.</li>
+</ul>
+<h4 id="problems-challenges-2">Problems / Challenges</h4>
+<ul>
+<li>Need to figure out proper Extrusion Rate.</li>
+<li>Need to figure out proper Feed Rate.</li>
+</ul>
+<h4 id="next-actions-2">Next Actions</h4>
+<ul>
+<li>Learn infill</li>
+<li>Learn Extrusion Rate</li>
+<li>Learn Feed Rate</li>
+</ul>
+<h3 id="section-3">2025-11-24</h3>
+<p><a href="#2025-11-22">← Previous</a> | <a href="#">Next →</a></p>
+<h4 id="summary-3">Summary</h4>
+<p>Today we are filling in the square</p>
+<h4 id="steps-taken-3">Steps Taken</h4>
+<ol type="1">
+<li>Fill in the square. Add some directives to reset the machine.</li>
+</ol>
+<pre class="gcode"><code>    ; Any text that comes after a semicolon is a comment and will not be parsed
+    G28 ; This sends the printer home
+    G21
+    G90
+    M82
+    M106 ; Turn on the fan
+    M140 S60
+    M104 S200
+    M109 S60
+    M190 S200
+    G92 E0
+    G0 X0 Y0
+    G1 Z0.2 F1200
+    G1 X100 Y100 F3000
+    G1 E6 F200
+    G1 X125 Y100 E10 F3000
+    G1 X125 Y125 E14 F3000
+    G1 X100 Y125 E18 F3000
+    G1 X100 Y100 E22 F3000
+
+    ; This is a comment
+    ; This is the infill on the first layer. This will start at the bottom left -&gt; top right. Notice the pattern when moving in this direction
+    G1 X105 Y100 E22 F3000
+    G1 X100 Y105 E23 F3000
+    G1 X100 Y110 E24 F3000
+    G1 X110 Y100 E25 F3000
+    G1 X115 Y100 E26 F3000
+    G1 X100 Y115 E27 F3000
+    G1 X100 Y120 E28 F3000
+    G1 X120 Y100 E29 F3000
+    G1 X125 Y100 E30 F3000
+    G1 X100 Y125 E31 F3000 ; This is the top left corner of the box, and going back the other way now.
+    G1 X105 Y125 E32 F3000
+    G1 X125 Y105 E33 F3000
+    G1 X125 Y110 E34 F3000
+    G1 X110 Y125 E35 F3000
+    G1 X115 Y125 E36 F3000
+    G1 X125 Y115 E37 F3000
+    G1 X125 Y120 E38 F3000
+    G1 X120 Y125 E39 F3000
+
+    ; This builds the second layer
+    G1 X125 Y125 E40 F3000
+    G1 X100 Y125 E41 F3000
+    G1 X100 Y100 E42 F3000
+    G1 X125 Y100 E43 F3000
+    G1 X125 Y125 E44 F3000
+
+    ; This is the infill on the second layer. This will start at the top right -&gt; bottom left. Notice the pattern when moving in this direction
+    G1 X105 Y125 E45 F3000
+    G1 X100 Y120 E46 F3000
+    G1 X100 Y115 E47 F3000
+    G1 X110 Y125 E48 F3000
+    G1 X115 Y125 E49 F3000
+    G1 X100 Y110 E50 F3000
+    G1 X100 Y105 E51 F3000
+    G1 X120 Y125 E52 F3000
+    G1 X125 Y125 E53 F3000
+    G1 X100 Y100 E54 F3000 ; This is the top right corner, and going back the other way now.
+    G1 X105 Y100 E55 F3000
+    G1 X125 Y120 E56 F3000
+    G1 X125 Y115 E57 F3000
+    G1 X110 Y100 E58 F3000
+    G1 X115 Y100 E59 F3000
+    G1 X125 Y110 E60 F3000
+    G1 X125 Y105 E61 F3000
+    G1 X120 Y100 E62 F3000
+    G1 X125 Y105 E63 F3000
+
+    ; Ending touches
+    G1 E61 F1200 ; Retract filament some
+    G1 X125 Y105 Z25 ; Move out of the way
+    M140 S0 ; Turn off hotend and bed
+    M104 S0
+    M107 ; Turn off the fan
+    M84 ; Disable Steppers</code></pre>
+<ul>
+<li>Extrusion Rate is inconsistent for longer paths.</li>
+<li>Bed and hotend temps are swapped.</li>
+<li>Zig zag pattern is apparently not efficient and error prone.</li>
+<li>Z axis does not increase for 2nd layer causing collisions.</li>
+</ul>
+<pre class="gcode"><code>    ; Any text that comes after a semicolon is a comment and will not be parsed
+    G28 ; This sends the printer home
+    G21
+    G90
+    M82
+    M106 ; Turn on the fan
+    M140 S60
+    M104 S200
+    M190 S60 ; Switch these around to fix it
+    M109 S200
+    G92 E0
+    G0 X0 Y0
+    G1 Z0.2 F1200
+    G1 X100 Y100 F3000
+    G1 E6 F200
+    G1 X125 Y100 E10 F3000
+    G1 X125 Y125 E14 F3000
+    G1 X100 Y125 E18 F3000
+    G1 X100 Y100 E22 F3000
+
+    ; This is a comment
+    ; This is the infill on the first layer. This will start at the bottom left -&gt; top right. Notice the pattern when moving in this direction
+    G1 X105 Y100 E22 F3000
+    G1 X100 Y105 E23 F3000
+    G1 X100 Y110 E24 F3000
+    G1 X110 Y100 E25 F3000
+    G1 X115 Y100 E26 F3000
+    G1 X100 Y115 E27 F3000
+    G1 X100 Y120 E28 F3000
+    G1 X120 Y100 E29 F3000
+    G1 X125 Y100 E30 F3000
+    G1 X100 Y125 E31 F3000 ; This is the top left corner of the box, and going back the other way now.
+    G1 X105 Y125 E32 F3000
+    G1 X125 Y105 E33 F3000
+    G1 X125 Y110 E34 F3000
+    G1 X110 Y125 E35 F3000
+    G1 X115 Y125 E36 F3000
+    G1 X125 Y115 E37 F3000
+    G1 X125 Y120 E38 F3000
+    G1 X120 Y125 E39 F3000
+
+    ; This builds the second layer
+    G1 Z0.4 F1200 ; Added this to go up one layer
+    G1 X125 Y125 E40 F3000
+    G1 X100 Y125 E41 F3000
+    G1 X100 Y100 E42 F3000
+    G1 X125 Y100 E43 F3000
+    G1 X125 Y125 E44 F3000
+
+    ; This is the infill on the second layer. This will start at the top right -&gt; bottom left. Notice the pattern when moving in this direction
+    G1 X105 Y125 E45 F3000
+    G1 X100 Y120 E46 F3000
+    G1 X100 Y115 E47 F3000
+    G1 X110 Y125 E48 F3000
+    G1 X115 Y125 E49 F3000
+    G1 X100 Y110 E50 F3000
+    G1 X100 Y105 E51 F3000
+    G1 X120 Y125 E52 F3000
+    G1 X125 Y125 E53 F3000
+    G1 X100 Y100 E54 F3000 ; This is the top right corner, and going back the other way now.
+    G1 X105 Y100 E55 F3000
+    G1 X125 Y120 E56 F3000
+    G1 X125 Y115 E57 F3000
+    G1 X110 Y100 E58 F3000
+    G1 X115 Y100 E59 F3000
+    G1 X125 Y110 E60 F3000
+    G1 X125 Y105 E61 F3000
+    G1 X120 Y100 E62 F3000
+    G1 X125 Y105 E63 F3000
+
+    ; Ending touches
+    G1 E61 F1200 ; Retract filament some
+    G1 X125 Y105 Z25 ; Move out of the way
+    M140 S0 ; Turn off hotend and bed
+    M104 S0
+    M107 ; Turn off the fan
+    M84 ; Disable Steppers</code></pre>
+<ul>
+<li>The extrusion rate is wrong. But would be ok to test. It won’t break
+your machine.</li>
+<li>This is where making the shapes in blender creates the .STL file,
+which you send to the slicer, which makes these calculations for you,
+and spits out the .gcode file.</li>
+</ul>
+<h4 id="observations-notes-3">Observations &amp; Notes</h4>
+<ul>
+<li>Extrusion Rate is inconsistent for longer paths.</li>
+<li>Bed and hotend temps are swapped.</li>
+<li>Zig zag pattern is apparently not efficient and error prone.</li>
+<li>Z axis does not increase for 2nd layer causing collisions.</li>
+<li>Use the CAD and Slicer programs to make the calculations you need
+for you.</li>
+</ul>
+<h4 id="problems-challenges-3">Problems / Challenges</h4>
+<ul>
+<li>Finding the Extrusion Rate for each step can be tedious and error
+prone.</li>
+<li>Minor mistakes, like swapping bed heating and hotend heating.</li>
+<li>We do have a basic header and footer for each file.</li>
+</ul>
+<h4 id="next-actions-3">Next Actions</h4>
+<ul>
+<li>Run the print.</li>
+<li>Start learning Blender. (I’ll need to make room on my PC at this
+point)</li>
+</ul>
+<hr />
+<h2 id="final-technical-report">Final Technical Report</h2>
+<h3 id="project-summary">Project Summary</h3>
+<p>[Brief recap of what the project is and its purpose]</p>
+<h3 id="development-process">Development Process</h3>
+<p>[How the project was developed step-by-step]</p>
+<h3 id="features-implemented">Features Implemented</h3>
+<p>[List of final features and modules]</p>
+<h3 id="technical-specifications">Technical Specifications</h3>
+<p>[Full specs, APIs, protocols used]</p>
+<h3 id="testing-validation">Testing &amp; Validation</h3>
+<p>[Testing approach, tools used, and results]</p>
+<h3 id="lessons-learned">Lessons Learned</h3>
+<p>[Key takeaways and improvements for next time]</p>
+<h3 id="future-work">Future Work</h3>
+<p>[Potential next versions, enhancements, or research]</p>
+<h3 id="appendices">Appendices</h3>
+<ul>
+<li>https://reprap.org/wiki/RepRap</li>
+<li>https://www.thingiverse.com/thing:1278865</li>
+<li>https://www.crealitycloud.com/downloads/firmware/ender-series/ender-3</li>
+<li>https://www.unixmen.com/3d-printing-arch-linux/</li>
+<li>https://3dsolved.com/ender-3-how-to-level-the-bed/</li>
+<li>https://www.instructables.com/G-code/</li>
+<li>https://3dgo.app/slicer</li>
+</ul>
+<hr />
+<p><small></p>
+<p>Template generated by ChatGPT<br />
+Documentation generated by <a
+href="https://padsrepo.github.io/pads/#paddocs">PADDOCS</a><br />
+Compendium section: 10-docs<br />
+Title: Project MakeMe<br />
+Author: Joe Corso<br />
+Created: 2025-11-14<br />
+Updated: 2025-11-15<br />
+Tags: Creality, Ender-3, 3D Printing, Blender, Slic3r<br />
+Status: <strong>Draft</strong><br />
+Template:<br />
+- 00-project-proposal.md<br />
+- 01-project-overview.md<br />
+- 02-design-report.md<br />
+- 03-technical-report.md<br />
+- 04-research-log.md<br />
+- 05-final-report.md</p>
+<p>License: “All Rights Reserved”<br />
+Schema: technical<br />
+Version: 0.1.1<br />
+Branding: Mindmap<br />
+</small></p>
+
+<footer>
+  <small>All Rights Reserved (c) Joe Corso 2025</small>
+  <small>This documentation was generated using <a href="https://padsrepo.github.io/pads/#paddocs">PADDOCS</a></small>
+</footer>
+</body>
+</html>
